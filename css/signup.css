@@ -1,0 +1,61 @@
+html, body {
+  min-height: 100vh;
+}
+
+/* ── Signup form container ── */
+.form-signup {
+  max-width: 420px;
+  padding: 1.5rem;
+}
+
+/* ── Stack all inputs with no gap ── */
+.form-signup .form-floating {
+  position: relative;
+}
+
+.form-signup .form-floating + .form-floating {
+  margin-top: -1px;
+}
+
+.form-signup .form-floating:focus-within {
+  z-index: 2;
+}
+
+/* ── Remove border-radius on middle inputs ── */
+.form-signup .form-floating input {
+  border-radius: 0;
+}
+
+/* ── Username — top of stack ── */
+#floatingUsername {
+  border-top-left-radius: var(--bs-border-radius) !important;
+  border-top-right-radius: var(--bs-border-radius) !important;
+}
+
+/* ── Password — bottom of stack ── */
+#floatingPassword {
+  border-bottom-left-radius: var(--bs-border-radius) !important;
+  border-bottom-right-radius: var(--bs-border-radius) !important;
+  margin-bottom: 12px;
+}
+
+/* ── Focus accent per field ── */
+#floatingUsername:focus {
+  border-color: #6f42c1;
+  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.2);
+}
+
+#floatingPhone:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.2);
+}
+
+#floatingEmail:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
+}
+
+#floatingPassword:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.2);
+}
