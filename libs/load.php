@@ -1,5 +1,9 @@
 <?php
 
+include_once 'includes/Mic.class.php';
+include_once 'includes/User.class.php';
+include_once 'includes/Database.class.php';
+
 function load_template($name){
     include $_SERVER['DOCUMENT_ROOT']."/htdocs/app/__templates/$name.php";
 }
@@ -14,18 +18,9 @@ function validate_credentials($username, $password) {
 
 function signup($user, $pass, $email, $phone)
 {
-    $db_server = "127.0.0.1";
-    $db_user   = "root";
-    $db_pass   = "Admin1234";
-    $db_name   = "mynewdb";
+    mysqli_report(MYSQLI_REPORT_OFF); // Disable auto-exceptions so we can handle errors manually
 
-    // Create connection
-    $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+$conn = Database::getDatabaseConnection();
 
     $sql = "INSERT INTO `auth` (`username`, `password`, `email`, `phone`, `blocked`, `active`)
             VALUES ('$user', '$pass', '$email', '$phone', '0', '1')";

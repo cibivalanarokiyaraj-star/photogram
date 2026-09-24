@@ -1,0 +1,14 @@
+[2026-09-24] Topic: architecture analysis
+Question: by analyzing this whole repo what architecture is this developer is building
+
+[2026-09-24] Topic: repo architecture
+Question: create me a txtfile in app directory that text file write whatever the doubt i ask you and record it with date and topic.
+
+[2026-09-24] Topic: PHP static vs object method
+Question: in php what is the diff btw using static function directly and using function using objects
+
+Answer:
+Static method: belongs to the class itself, called with ClassName::method(), no object state, cannot use $this.
+Instance/object method: belongs to an object, called with $obj->method(), can use object properties and $this, and is preferred when behavior depends on state.
+Rule: use static for stateless utility logic; use object methods for stateful, OOP behavior.
+

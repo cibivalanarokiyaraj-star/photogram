@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email    = trim($_POST['email_address']);
         $phone    = trim($_POST['phone']);
 
-        $result = signup($username, $password, $email, $phone);
+        $result = User::signup($username, $password, $email, $phone);
 
         if ($result === false) {
             $success = true; // show success modal, then redirect
