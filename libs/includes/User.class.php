@@ -2,9 +2,9 @@
 class User
 {
     private $conn;
-
     public static function signup($user, $pass, $email, $phone)
     {
+        $pass = md5($pass);
         $conn = Database::getDatabaseConnection();
         $sql = "INSERT INTO `auth` (`username`, `password`, `email`, `phone`, `blocked`, `active`)
                 VALUES ('$user', '$pass', '$email', '$phone', '0', '1')";
@@ -21,12 +21,34 @@ class User
             }
         }
 
-        $conn->close();
+       // $conn->close();
         return $error;
     }
 
-    public function __construct($username = null, $password = null, $email = null, $phone = null)
+    public function __construct($username)
     {
         $this->conn = Database::getDatabaseConnection();
+       // $this->conn->query();
     }
+
+    public function authenticate()
+    {
+    }
+
+    public function setBio()
+    {
+    }
+
+    public function getBio()
+    {
+    }
+
+    public function setAvatar()
+    {
+    }
+    
+    public function getAvatar()
+    {
+    }
+
 }
