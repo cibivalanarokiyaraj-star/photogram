@@ -4,7 +4,7 @@ class User
     private $conn;
     public static function signup($user, $pass, $email, $phone)
     {
-        $pass = md5($pass);
+        $pass = md5(strrev(md5($pass)));
         $conn = Database::getDatabaseConnection();
         $sql = "INSERT INTO `auth` (`username`, `password`, `email`, `phone`, `blocked`, `active`)
                 VALUES ('$user', '$pass', '$email', '$phone', '0', '1')";
@@ -23,6 +23,22 @@ class User
 
        // $conn->close();
         return $error;
+    }
+
+    public static function login($user, $pass)
+    {
+        $pass = md5(strrev(md5($pass)));
+        $query = "SELECT * FROM `auth` WHERE `username` = '$user' AND `password` = '$pass'";
+        $conn = Database::getDatabaseConnection();
+        $result = $conn->query($query);
+        if($result->num_rows ==1) {
+            $row = $result->fetch_assoc();
+            if($row['password'] == $pass) {
+                return $row;
+            }
+        } else{
+        return false;
+        }
     }
 
     public function __construct($username)
