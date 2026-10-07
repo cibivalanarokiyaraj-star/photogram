@@ -1,8 +1,8 @@
 <?php
 include 'libs/load.php';
 
-$user = "cibi";
-$pass = "cibi";
+$user = "hello";
+$pass = "helloworld";
 $result = null;
 
 if (isset($_GET['logout'])) {
