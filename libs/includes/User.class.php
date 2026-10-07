@@ -2,16 +2,28 @@
 class User
 {
     private $conn;
+
     public static function signup($user, $pass, $email, $phone)
     {
-        $pass = md5(strrev(md5($pass)));
-        $conn = Database::getDatabaseConnection();
-        $sql = "INSERT INTO `auth` (`username`, `password`, `email`, `phone`, `blocked`, `active`)
-                VALUES ('$user', '$pass', '$email', '$phone', '0', '1')";
+        $options = [
+            'cost' => 12,
+        ];
 
+        $hashedPass = password_hash($pass, PASSWORD_BCRYPT, $options);
+        $conn = Database::getDatabaseConnection();
+
+        $sql = "INSERT INTO `auth` (`username`, `password`, `email`, `phone`, `blocked`, `active`)
+                VALUES (?, ?, ?, ?, 0, 1)";
+
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            return $conn->error;
+        }
+
+        $stmt->bind_param('ssss', $user, $hashedPass, $email, $phone);
         $error = false;
 
-        if ($conn->query($sql) === TRUE) {
+        if ($stmt->execute() === TRUE) {
             $error = false;
         } else {
             if ($conn->errno === 1062) {
@@ -21,30 +33,39 @@ class User
             }
         }
 
-       // $conn->close();
+        $stmt->close();
         return $error;
     }
 
     public static function login($user, $pass)
     {
-        $pass = md5(strrev(md5($pass)));
-        $query = "SELECT * FROM `auth` WHERE `username` = '$user' AND `password` = '$pass'";
         $conn = Database::getDatabaseConnection();
-        $result = $conn->query($query);
-        if($result->num_rows ==1) {
+        $sql = "SELECT * FROM `auth` WHERE `username` = ? LIMIT 1";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            return false;
+        }
+
+        $stmt->bind_param('s', $user);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows === 1) {
             $row = $result->fetch_assoc();
-            if($row['password'] == $pass) {
+            if (password_verify($pass, $row['password'])) {
+                $stmt->close();
                 return $row;
             }
-        } else{
-        return false;
         }
+
+        $stmt->close();
+        return false;
     }
 
     public function __construct($username)
     {
         $this->conn = Database::getDatabaseConnection();
-       // $this->conn->query();
     }
 
     public function authenticate()
@@ -62,9 +83,8 @@ class User
     public function setAvatar()
     {
     }
-    
+
     public function getAvatar()
     {
     }
-
 }
